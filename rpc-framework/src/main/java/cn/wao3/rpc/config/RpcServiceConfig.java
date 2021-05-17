@@ -9,12 +9,13 @@ public class RpcServiceConfig {
     private String version;
     private String group;
     private Object service;
+    private int port;
 
     private String getServiceName() {
         return service.getClass().getInterfaces()[0].getCanonicalName();
     }
 
-    private String getRpcServiceName() {
+    public String getRpcServiceName() {
         return getServiceName() + group + version;
     }
 }
