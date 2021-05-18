@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RpcServiceConfig {
-    private String version;
-    private String group;
+public class RpcServiceConfig extends RpcConfig{
     private Object service;
     private int port;
 
@@ -16,6 +14,6 @@ public class RpcServiceConfig {
     }
 
     public String getRpcServiceName() {
-        return getServiceName() + group + version;
+        return getServiceName() + getGroup() + getVersion();
     }
 }
