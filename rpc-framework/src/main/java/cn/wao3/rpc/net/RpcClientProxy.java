@@ -10,11 +10,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Slf4j
-public class RpcClient implements InvocationHandler {
+public class RpcClientProxy implements InvocationHandler {
 
     private final RequestSender requestSender;
     private final RpcConfig rpcConfig;
