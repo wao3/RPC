@@ -5,6 +5,7 @@ import cn.wao3.rpc.common.exception.RpcException;
 import cn.wao3.rpc.config.RpcServiceConfig;
 import cn.wao3.rpc.registry.ServiceProvider;
 import cn.wao3.rpc.registry.ServiceRegistry;
+import cn.wao3.rpc.utils.SingletonUtil;
 
 import java.net.InetSocketAddress;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ZkServiceProvider implements ServiceProvider {
 
     public ZkServiceProvider() {
         this.serviceMap = new ConcurrentHashMap<>();
-        this.serviceRegistry = new ZkServiceRegistry();
+        this.serviceRegistry = SingletonUtil.getInstance(ZkServiceRegistry.class);
     }
 
     @Override

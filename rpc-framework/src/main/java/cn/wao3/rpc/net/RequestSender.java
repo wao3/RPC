@@ -5,5 +5,5 @@ import cn.wao3.rpc.dto.RpcResponse;
 
 public interface RequestSender {
 
-    RpcResponse<Object> sendRequest(RpcRequest request);
+    RpcResponse sendRequest(RpcRequest request);
 }

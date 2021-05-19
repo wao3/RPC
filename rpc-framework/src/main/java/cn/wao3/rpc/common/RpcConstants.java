@@ -14,10 +14,11 @@ import java.nio.charset.StandardCharsets;
  * @date 2021-05-15
  */
 public class RpcConstants {
-    public static final int HEADER_MAGIC_NUMBER = 0x59242364;
-    public static final int HEADER_BYTES_MAGIC = 4;
+    public static final byte[] HEADER_MAGIC_NUMBER = {0x59, 0x24, 0x23, 0x64};
+    public static final int HEADER_BYTES_MAGIC = HEADER_MAGIC_NUMBER.length;
     public static final int HEADER_BYTES_VERSION = 1;
     public static final int HEADER_BYTES_LENGTH = 3;
+    public static final int HEADER_TOTAL_LENGTH = HEADER_BYTES_MAGIC + HEADER_BYTES_VERSION + HEADER_BYTES_LENGTH;
 
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 

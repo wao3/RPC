@@ -2,6 +2,7 @@ package cn.wao3.rpc.net;
 
 import cn.wao3.rpc.common.exception.RpcException;
 import cn.wao3.rpc.dto.RpcRequest;
+import cn.wao3.rpc.dto.RpcResponse;
 import cn.wao3.rpc.registry.ServiceProvider;
 import cn.wao3.rpc.registry.zk.ZkServiceProvider;
 import cn.wao3.rpc.utils.SingletonUtil;
@@ -12,18 +13,14 @@ import java.lang.reflect.Method;
 
 @Slf4j
 public class RpcRequestHandler {
-    private final ServiceProvider serviceProvider;
+    private static final ServiceProvider serviceProvider = SingletonUtil.getInstance(ZkServiceProvider.class);
 
-    public RpcRequestHandler() {
-        serviceProvider = SingletonUtil.getInstance(ZkServiceProvider.class);
-    }
-
-    public Object handle(RpcRequest rpcRequest) {
+    public static RpcResponse handle(RpcRequest rpcRequest) {
         Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());
-        return invokeTargetMethod(rpcRequest, service);
+        return (RpcResponse) invokeTargetMethod(rpcRequest, service);
     }
 
-    private Object invokeTargetMethod(RpcRequest rpcRequest, Object service) {
+    private static Object invokeTargetMethod(RpcRequest rpcRequest, Object service) {
         Object result;
         try {
             Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
