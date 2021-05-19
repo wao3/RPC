@@ -31,7 +31,7 @@ public class ZkServiceProvider implements ServiceProvider {
         if (serviceMap.containsKey(rpcServiceName)) {
             return;
         }
-        serviceRegistry.register(rpcServiceName, new InetSocketAddress(config.getPort()));
+        serviceRegistry.register(rpcServiceName, new InetSocketAddress("127.0.0.1", config.getPort()));
         serviceMap.put(rpcServiceName, config.getService());
     }
 

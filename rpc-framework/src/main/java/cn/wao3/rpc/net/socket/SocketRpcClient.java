@@ -41,7 +41,7 @@ public class SocketRpcClient implements RequestSender {
         try (Socket socket = new Socket(serviceHost.getAddress(), serviceHost.getPort());
              OutputStream outputStream = socket.getOutputStream();
              InputStream inputStream = socket.getInputStream()) {
-            outputStream.write(bytes);
+            outputStream.write(SocketUtil.packRequest(bytes));
             outputStream.flush();
             byte[] body = SocketUtil.readBody(inputStream);
             return serializer.deserialize(body, RpcResponse.class);

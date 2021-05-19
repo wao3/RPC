@@ -3,6 +3,7 @@ package cn.wao3.rpc.net.socket;
 import cn.wao3.rpc.common.RpcConstants;
 import cn.wao3.rpc.common.enums.RpcExceptionMessageEnums;
 import cn.wao3.rpc.common.exception.RpcException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.io.InputStream;
  * @author wangao
  * @date 2021-05-19
  */
+@Slf4j
 public class SocketUtil {
     public static byte[] packRequest(byte[] body) {
         byte[] magicNumber = RpcConstants.HEADER_MAGIC_NUMBER;
@@ -33,6 +35,7 @@ public class SocketUtil {
             throw new RpcException(RpcExceptionMessageEnums.RPC_DATA_ERROR);
         }
         byte[] magicNumber = RpcConstants.HEADER_MAGIC_NUMBER;
+        log.debug("header: {}, magicNumber: {}", header, magicNumber);
         for (int i = 0; i < magicNumber.length; i++) {
             if (magicNumber[i] != header[i]) {
                 throw new RpcException(RpcExceptionMessageEnums.RPC_DATA_ERROR);
@@ -41,7 +44,9 @@ public class SocketUtil {
         // 暂时忽略版本号
         int version = header[4];
         // 返回数据包长度
-        return header[5] << 16 + header[6] << 8 + header[7];
+        return (Byte.toUnsignedInt(header[5]) << 16)
+                + (Byte.toUnsignedInt(header[6]) << 8)
+                + (Byte.toUnsignedInt(header[7]));
     }
 
     public static int getBodyLength(InputStream inputStream) throws IOException {

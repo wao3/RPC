@@ -17,10 +17,10 @@ public class RpcRequestHandler {
 
     public static RpcResponse handle(RpcRequest rpcRequest) {
         Object service = serviceProvider.getService(rpcRequest.getRpcServiceName());
-        return (RpcResponse) invokeTargetMethod(rpcRequest, service);
+        return invokeTargetMethod(rpcRequest, service);
     }
 
-    private static Object invokeTargetMethod(RpcRequest rpcRequest, Object service) {
+    private static RpcResponse invokeTargetMethod(RpcRequest rpcRequest, Object service) {
         Object result;
         try {
             Method method = service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamTypes());
@@ -29,6 +29,6 @@ public class RpcRequestHandler {
         } catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
             throw new RpcException(e.getMessage(), e);
         }
-        return result;
+        return RpcResponse.success(result, rpcRequest.getRequestId());
     }
 }
