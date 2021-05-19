@@ -1,10 +1,10 @@
 package cn.wao3.rpc.config;
 
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
 public class RpcServiceConfig extends RpcConfig{
     private Object service;
     private int port;
