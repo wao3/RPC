@@ -34,7 +34,7 @@ public class RpcClientProxy implements InvocationHandler {
                 .group(rpcConfig.getGroup())
                 .version(rpcConfig.getVersion())
                 .build();
-        RpcResponse<Object> rpcResponse = requestSender.sendRequest(rpcRequest);
+        RpcResponse rpcResponse = requestSender.sendRequest(rpcRequest);
         return rpcResponse.getData();
     }
 }

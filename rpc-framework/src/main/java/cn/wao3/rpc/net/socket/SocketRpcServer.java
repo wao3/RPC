@@ -41,8 +41,10 @@ public class SocketRpcServer implements RpcServer {
     public void start() {
         try {
             ServerSocket serverSocket = new ServerSocket(rpcServiceConfig.getPort());
-            Socket socket = serverSocket.accept();
-            handleRequest(socket);
+            while (true) {
+                Socket socket = serverSocket.accept();
+                handleRequest(socket);
+            }
         } catch (IOException e) {
             throw new RpcException(RpcExceptionMessageEnums.RPC_SERVER_ERROR);
         }
