@@ -3,6 +3,7 @@ package cn.wao3.rpc.net;
 import cn.wao3.rpc.common.RpcConstants;
 import cn.wao3.rpc.common.enums.RpcExceptionMessageEnums;
 import cn.wao3.rpc.common.exception.RpcException;
+import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -76,5 +77,24 @@ public class ByteUtil {
             throw new IOException();
         }
         return result;
+    }
+
+    public static byte[] readBody(ByteBuf byteBuf) {
+        if (RpcConstants.MAGIC_NUMBER != byteBuf.readInt()) {
+            throw new RpcException(RpcExceptionMessageEnums.RPC_DATA_ERROR);
+        }
+        byte version = byteBuf.readByte();
+        int length = ByteUtil.readLength(byteBuf);
+        byte[] body = new byte[length];
+        byteBuf.readBytes(body);
+        return body;
+    }
+
+    public static int readLength(ByteBuf byteBuf) {
+        byte[] length = new byte[3];
+        byteBuf.readBytes(length);
+        return (Byte.toUnsignedInt(length[0]) << 16)
+                + (Byte.toUnsignedInt(length[1]) << 8)
+                + (Byte.toUnsignedInt(length[2]));
     }
 }

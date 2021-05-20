@@ -40,6 +40,8 @@ public class ZkUtils {
             RetryPolicy retryPolicy = new ExponentialBackoffRetry(BASE_SLEEP_TIME, MAX_RETRIES);
             zkClient.set(CuratorFrameworkFactory.builder()
                     .connectString(DEFAULT_ZOOKEEPER_ADDRESS)
+                    .sessionTimeoutMs(10000)
+                    .connectionTimeoutMs(50000)
                     .retryPolicy(retryPolicy)
                     .build());
             zkClient.get().start();
