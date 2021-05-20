@@ -1,10 +1,10 @@
 package cn.wao3.rpc.net.socket;
 
-import cn.wao3.rpc.common.RpcConstants;
 import cn.wao3.rpc.common.enums.RpcExceptionMessageEnums;
 import cn.wao3.rpc.common.exception.RpcException;
 import cn.wao3.rpc.dto.RpcRequest;
 import cn.wao3.rpc.dto.RpcResponse;
+import cn.wao3.rpc.net.ByteUtil;
 import cn.wao3.rpc.net.RequestSender;
 import cn.wao3.rpc.registry.ServiceRegistry;
 import cn.wao3.rpc.registry.zk.ZkServiceRegistry;
@@ -36,14 +36,14 @@ public class SocketRpcClient implements RequestSender {
     @Override
     public RpcResponse sendRequest(RpcRequest request) {
         byte[] bytes = serializer.serialize(request);
-        byte[] requestBytes = SocketUtil.packRequest(bytes);
+        byte[] requestBytes = ByteUtil.wrapBody(bytes);
         InetSocketAddress serviceHost = serviceRegistry.discover(request);
         try (Socket socket = new Socket(serviceHost.getAddress(), serviceHost.getPort());
              OutputStream outputStream = socket.getOutputStream();
              InputStream inputStream = socket.getInputStream()) {
-            outputStream.write(SocketUtil.packRequest(bytes));
+            outputStream.write(ByteUtil.wrapBody(bytes));
             outputStream.flush();
-            byte[] body = SocketUtil.readBody(inputStream);
+            byte[] body = ByteUtil.readBody(inputStream);
             return serializer.deserialize(body, RpcResponse.class);
         } catch (IOException e) {
             throw new RpcException(RpcExceptionMessageEnums.RPC_REQUEST_FAILED);

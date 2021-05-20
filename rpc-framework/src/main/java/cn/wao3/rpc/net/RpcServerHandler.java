@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 @Slf4j
-public class RpcRequestHandler {
+public class RpcServerHandler {
     private static final ServiceProvider serviceProvider = SingletonUtil.getInstance(ZkServiceProvider.class);
 
     public static RpcResponse handle(RpcRequest rpcRequest) {

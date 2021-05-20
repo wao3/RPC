@@ -5,7 +5,8 @@ import cn.wao3.rpc.common.exception.RpcException;
 import cn.wao3.rpc.config.RpcServiceConfig;
 import cn.wao3.rpc.dto.RpcRequest;
 import cn.wao3.rpc.dto.RpcResponse;
-import cn.wao3.rpc.net.RpcRequestHandler;
+import cn.wao3.rpc.net.ByteUtil;
+import cn.wao3.rpc.net.RpcServerHandler;
 import cn.wao3.rpc.net.RpcServer;
 import cn.wao3.rpc.registry.ServiceProvider;
 import cn.wao3.rpc.registry.zk.ZkServiceProvider;
@@ -54,11 +55,11 @@ public class SocketRpcServer implements RpcServer {
         threadPool.execute(() -> {
             try(InputStream inputStream = socket.getInputStream();
                 OutputStream outputStream = socket.getOutputStream()) {
-                byte[] body = SocketUtil.readBody(inputStream);
+                byte[] body = ByteUtil.readBody(inputStream);
                 RpcRequest rpcRequest = serializer.get().deserialize(body, RpcRequest.class);
-                RpcResponse rpcResponse = RpcRequestHandler.handle(rpcRequest);
+                RpcResponse rpcResponse = RpcServerHandler.handle(rpcRequest);
                 byte[] resBody = serializer.get().serialize(rpcResponse);
-                byte[] resBytes = SocketUtil.packRequest(resBody);
+                byte[] resBytes = ByteUtil.wrapBody(resBody);
                 outputStream.write(resBytes);
                 outputStream.flush();
             } catch (IOException e) {

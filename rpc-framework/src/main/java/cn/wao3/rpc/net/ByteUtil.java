@@ -1,4 +1,4 @@
-package cn.wao3.rpc.net.socket;
+package cn.wao3.rpc.net;
 
 import cn.wao3.rpc.common.RpcConstants;
 import cn.wao3.rpc.common.enums.RpcExceptionMessageEnums;
@@ -13,8 +13,8 @@ import java.io.InputStream;
  * @date 2021-05-19
  */
 @Slf4j
-public class SocketUtil {
-    public static byte[] packRequest(byte[] body) {
+public class ByteUtil {
+    public static byte[] wrapBody(byte[] body) {
         byte[] magicNumber = RpcConstants.HEADER_MAGIC_NUMBER;
         byte[] version = new byte[]{ 0x1 };
         int length = body.length;
@@ -56,7 +56,7 @@ public class SocketUtil {
         if (read != headerLength) {
             throw new IOException();
         }
-        return SocketUtil.checkHeader(header);
+        return ByteUtil.checkHeader(header);
     }
 
     public static byte[] readBody(InputStream inputStream, int bodyLength) throws IOException {
